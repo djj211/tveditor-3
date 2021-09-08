@@ -1,25 +1,22 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { ThemeProvider } from '@material-ui/core/styles';
+import { ToastProvider } from 'react-toast-notifications';
 
-function App() {
+import ShowsContextProvider from "./Context/shows.context"
+import Header from "./components/Header";
+import theme from "./Theme";
+import Shows from './components/Shows';
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <ToastProvider autoDismiss={true} newestOnTop={true}>
+        <Header />
+        <ShowsContextProvider>
+          <Shows />
+        </ShowsContextProvider>
+      </ToastProvider>
+    </ThemeProvider>
   );
 }
 
