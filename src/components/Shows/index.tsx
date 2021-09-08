@@ -40,7 +40,8 @@ const Shows = () => {
 
     React.useEffect(() => {
       refreshShows();
-    }, [refreshShows])
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     const onClick = () => {
       setSearchOpen(true);
