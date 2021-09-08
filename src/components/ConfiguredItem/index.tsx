@@ -18,7 +18,7 @@ const ConfiguredItem = ({ item }: Props) => {
 
   return (
     <>
-      <Poster image={item.tvdb.image_url} width={150} posterClick={onPosterClick} hoverEffect />
+      <Poster imgAlt={item.flexget.name} image={item.tvdb.image_url} width={150} posterClick={onPosterClick} hoverEffect />
       <ItemEditor item={item} open={editOpen} handleClose={() => setEditOpen(false)} />
     </>
   )

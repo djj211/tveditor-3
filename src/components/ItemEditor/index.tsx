@@ -131,7 +131,7 @@ const ItemEditor = ({ item, open, handleClose }: Props ) => {
             </DialogTitle>
             <DialogContent>
                 <div className={classes.overviewContainer}>
-                    <Poster image={item.tvdb.image_url} width={100} />
+                    <Poster image={item.tvdb.image_url} width={100} imgAlt={item.flexget.name} />
                     <div className={classes.overviewText}>{item.tvdb.overview}</div>
                 </div>
                 <InfoItem 
