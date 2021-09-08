@@ -110,7 +110,7 @@ const Results = ({ items, open, season, episode, onClose }: Props) => {
                    className={item.id === selected?.id ? classes.selected : classes.result}
                    onClick={() => onShowClick(item)}
                   >
-                    <Poster key={item.id} image={item.image_url} width={100} />
+                    <Poster key={item.id} image={item.image_url} width={100} imgAlt={item.name} />
                     <div className={classes.textItem}>{item.name}</div>
                     {!isMobileOnly && <div className={classes.textItem}>{item.network}</div>}
                     {!isMobileOnly && <div className={classes.overview}>{item.overview}</div>}

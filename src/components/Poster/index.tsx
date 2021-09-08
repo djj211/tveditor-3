@@ -28,9 +28,10 @@ interface StyleProps {
 
 interface Props extends StyleProps {
   image: string;
+  imgAlt: string;
 }
 
-const Poster = ({image, width, hoverEffect, posterClick}: Props) => {
+const Poster = ({image, width, hoverEffect, imgAlt, posterClick}: Props) => {
     const classes = useStyles({ width, hoverEffect });
     
     const onClick = () => {
@@ -41,7 +42,7 @@ const Poster = ({image, width, hoverEffect, posterClick}: Props) => {
 
     return (
       <div className={classes.posterContainer} onClick={onClick}>
-        <img className={classes.poster} src={image} />
+        <img alt={imgAlt} className={classes.poster} src={image} />
       </div>
     )
 }

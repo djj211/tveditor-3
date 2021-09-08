@@ -40,7 +40,7 @@ const Shows = () => {
 
     React.useEffect(() => {
       refreshShows();
-    }, [])
+    }, [refreshShows])
 
     const onClick = () => {
       setSearchOpen(true);
