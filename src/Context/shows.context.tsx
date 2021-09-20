@@ -48,7 +48,7 @@ const ShowsContextProvider = ({
     const { search, searchOne } = useTVDB();
     const { getShows: getProxy, addShow: addProxy, editShow: editProxy, deleteShow: deleteProxy, search: searchProxy } = useProxy();
 
-    const doRefresh = async() => {
+    const doRefresh = React.useCallback(async() => {
         const foundShows = await getSeries();
         const showData = await Promise.all(foundShows.map(async (f) => {
             return {
@@ -57,23 +57,23 @@ const ShowsContextProvider = ({
             }
         }));
         setShows(showData);
-    }
+    }, [getSeries, searchOne, setShows]);
 
-    const proxyRefresh = async () => {
+    const proxyRefresh = React.useCallback(async () => {
         const showData = await getProxy();
         setShows(showData);
-    }
+    }, [getProxy, setShows]);
 
-    const theRefresh = usingProxy ? proxyRefresh : doRefresh;
+    const theRefresh = React.useMemo(() => usingProxy ? proxyRefresh : doRefresh, [usingProxy, proxyRefresh, doRefresh]);
     const theAdd = usingProxy ? addProxy : addSeries;
     const theEdit = usingProxy ? editProxy : editSeries;
     const theSearch = usingProxy ? searchProxy : search;
 
-    const refreshShows = async() => {
+    const refreshShows = React.useCallback(async() => {
         setRefreshLoading(true);
         await theRefresh();
         setRefreshLoading(false);
-    }
+    }, [setRefreshLoading, theRefresh]);
 
     const addShow = async(name: string, season: number, episode: number) => {
         setEditLoading(true);

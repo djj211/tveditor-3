@@ -17,7 +17,7 @@ const ProtectedRoute = (props: RouteProps ) => {
       if (!authenticated) {
         addToast("You must login to access that resource!", { appearance: 'error' });
       }
-    }, [authenticated]);
+    }, [authenticated, addToast]);
 
     if(authenticated) {
         return <Route {...props} />;
