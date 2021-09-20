@@ -2,15 +2,11 @@ import { AxiosRequestConfig } from "axios";
 import jwt_decode from "jwt-decode";
 
 import { useApi } from "./useApi";
-import { TVDBItem } from "../interfaces";
+import { TVDBItem, DecodedToken } from "../interfaces";
 
 const TVDB_PIN = process.env.REACT_APP_TVDB_PIN!;
 const TVDB_API_KEY = process.env.REACT_APP_TVDB_API_KEY!;
 const BASE_URL = process.env.REACT_APP_TVDB_API_URL!;
-
-interface DecodedToken {
-    exp: number
-}
 
 interface TVDBResp {
     data: [{

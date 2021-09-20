@@ -3,6 +3,8 @@ import React from 'react';
 import { Show, TVDBItem } from '../interfaces';
 import { useFlexget } from "../hooks/useFlexget";
 import { useTVDB } from "../hooks/useTVDB";
+import { useProxy } from "../hooks/useProxy";
+import { useAuth } from "../Context/auth.context";
 
 interface ShowsContextType {
     shows?: Show[];
@@ -41,8 +43,10 @@ const ShowsContextProvider = ({
     const [ deleteLoading, setDeleteLoading ] = React.useState(false);
     const [ shows, setShows ] = React.useState<Show[]>();
 
+    const { usingProxy } = useAuth();
     const { getSeries, addSeries, editSeries, deleteSeries } = useFlexget();
     const { search, searchOne } = useTVDB();
+    const { getShows: getProxy, addShow: addProxy, editShow: editProxy, deleteShow: deleteProxy, search: searchProxy } = useProxy();
 
     const doRefresh = async() => {
         const foundShows = await getSeries();
@@ -52,20 +56,30 @@ const ShowsContextProvider = ({
                 tvdb: await searchOne(f.name)
             }
         }));
-        setShows(showData)
+        setShows(showData);
     }
+
+    const proxyRefresh = async () => {
+        const showData = await getProxy();
+        setShows(showData);
+    }
+
+    const theRefresh = usingProxy ? proxyRefresh : doRefresh;
+    const theAdd = usingProxy ? addProxy : addSeries;
+    const theEdit = usingProxy ? editProxy : editSeries;
+    const theSearch = usingProxy ? searchProxy : search;
 
     const refreshShows = async() => {
         setRefreshLoading(true);
-        await doRefresh();
+        await theRefresh();
         setRefreshLoading(false);
     }
 
     const addShow = async(name: string, season: number, episode: number) => {
         setEditLoading(true);
         try {
-            await addSeries(name, season, episode);
-            await doRefresh();
+            await theAdd(name, season, episode);
+            await theRefresh();
         }
         catch(ex) {
             throw ex;
@@ -77,21 +91,26 @@ const ShowsContextProvider = ({
 
     const editShow = async(showId: number, name: string, season: number, episode: number) => {
         setEditLoading(true);
-        await editSeries(showId, name, season, episode);
-        await doRefresh();
+        await theEdit(showId, name, season, episode);
+        await theRefresh();
         setEditLoading(false);
     }
 
     const deleteShow = async(showId: number, name: string) => {
         setDeleteLoading(true);
-        await deleteSeries(showId, name);
-        await doRefresh();
+        if (usingProxy) {
+            await deleteProxy(showId);
+        }
+        else {
+            await deleteSeries(showId, name);
+        }
+        await theRefresh();
         setDeleteLoading(false);
     }
 
     const searchShows = async(queryStr: string) => {
         setSearchLoading(true);
-        const shows = await search(queryStr);
+        const shows = await theSearch(queryStr);
         setSearchLoading(false);
         return shows;
     }

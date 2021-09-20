@@ -107,3 +107,7 @@ export interface CreateFlexget {
     name: string;
     alternate_names?: string[];
 }
+
+export interface DecodedToken {
+    exp: number
+}
