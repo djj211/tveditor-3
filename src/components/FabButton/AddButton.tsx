@@ -1,19 +1,19 @@
-import React from "react";
-import AddIcon from '@material-ui/icons/Add';
+import React from 'react';
+import AddIcon from '@mui/icons-material/Add';
 
-import FabButton from "./";
+import FabButton from '.';
 
 interface Props {
-    onClick: () => void;
+  onClick: () => void;
+  className?: string;
 }
 
-const AddButton = ({ onClick }: Props) => {
-
-    return (
-        <FabButton onClick={onClick}>
-            <AddIcon />
-        </FabButton>
-    )
-}
+const AddButton = ({ onClick, className }: Props) => {
+  return (
+    <FabButton onClick={onClick} className={className}>
+      <AddIcon />
+    </FabButton>
+  );
+};
 
 export default AddButton;

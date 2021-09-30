@@ -1,18 +1,25 @@
-import { createTheme } from '@material-ui/core/styles';
-import { blue, green } from '@material-ui/core/colors'
+import { createTheme } from '@mui/material/styles';
+import { blue, green } from '@mui/material/colors';
 
 const theme = createTheme({
-    palette: {
-        primary: blue,
-        secondary: green,
+  palette: {
+    primary: blue,
+    secondary: green,
+  },
+  components: {
+    MuiTextField: {
+      defaultProps: {
+        variant: 'standard',
+      },
     },
-    overrides: {
-        MuiDialog: {
-            root: {
-              zIndex: 999
-            }
-        }
-    }
+    MuiDialog: {
+      styleOverrides: {
+        root: {
+          zIndex: 900,
+        },
+      },
+    },
+  },
 });
 
 export default theme;

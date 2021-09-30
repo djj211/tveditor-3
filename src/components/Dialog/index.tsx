@@ -1,5 +1,5 @@
 import React from "react";
-import MaterialDialog, { DialogProps } from '@material-ui/core/Dialog';
+import MaterialDialog, { DialogProps } from '@mui/material/Dialog';
 
 const Dialog = (props: DialogProps) => (
     <MaterialDialog

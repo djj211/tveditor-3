@@ -1,30 +1,21 @@
-import React from "react";
-import { makeStyles } from '@material-ui/core';
-import Fab from '@material-ui/core/Fab';
-
-const useStyles = makeStyles(() => ({
-    root: {
-        position: "sticky",
-        bottom: 10,
-        float: "right"
-    }
-}));
+import React from 'react';
+import Fab from '@mui/material/Fab';
 
 interface Props {
-    children: React.ReactChild
-    onClick: () => void;
+  children: React.ReactChild;
+  onClick: () => void;
+  className?: string;
+  size?: 'small' | 'medium' | 'large';
 }
 
-const FabButton = ({children, onClick}: Props) => {
-    const classes = useStyles();
-
-    return (
-      <div className={classes.root}>
-        <Fab color="primary" aria-label="add" onClick={onClick}>
-          {children}
-        </Fab>
-      </div>
-    )
-}
+const FabButton = ({ children, onClick, className, size }: Props) => {
+  return (
+    <div className={className}>
+      <Fab color="primary" aria-label="add" size={size} onClick={onClick}>
+        {children}
+      </Fab>
+    </div>
+  );
+};
 
 export default FabButton;
