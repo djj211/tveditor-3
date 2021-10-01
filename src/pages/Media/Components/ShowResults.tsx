@@ -1,17 +1,12 @@
 import React from 'react';
 import makeStyles from '@mui/styles/makeStyles';
-import Button from '@mui/material/Button';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
 import { isMobileOnly } from 'react-device-detect';
-import { useToasts } from 'react-toast-notifications';
 
-import Poster from '../Poster';
-import LoadingButton from '../LoadingButton';
-import Dialog from '../Dialog';
-import { TVDBItem } from '../../interfaces';
-import { useShows } from '../../Context/shows.context';
+import SearchResults from '../../../components/SearchResults';
+import { TVDBShowItem } from '../../../interfaces';
+import { useMedia } from '../../../Context/media.context';
+import { useToasts } from 'react-toast-notifications';
+import Poster from '../../../components/Poster';
 
 const useStyles = makeStyles((theme) => ({
   selected: {
@@ -39,17 +34,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface Props {
-  items: TVDBItem[];
   open: boolean;
+  items: TVDBShowItem[];
   season: number;
   episode: number;
   onClose: () => void;
 }
 
-const Results = ({ items, open, season, episode, onClose }: Props) => {
+const ShowResults = ({ items, season, episode, onClose, open }: Props) => {
   const classes = useStyles();
-  const [selected, setSelected] = React.useState<TVDBItem>();
-  const { addShow, editLoading } = useShows();
+  const [selected, setSelected] = React.useState<TVDBShowItem>();
+  const { addShow, editLoading } = useMedia();
   const { addToast } = useToasts();
 
   const handleOnClose = () => {
@@ -57,7 +52,7 @@ const Results = ({ items, open, season, episode, onClose }: Props) => {
     setSelected(undefined);
   };
 
-  const onShowClick = (show: TVDBItem) => {
+  const onShowClick = (show: TVDBShowItem) => {
     if (show.id === selected?.id) {
       setSelected(undefined);
       return;
@@ -90,16 +85,8 @@ const Results = ({ items, open, season, episode, onClose }: Props) => {
   };
 
   return (
-    <Dialog
-      fullWidth
-      maxWidth="lg"
-      open={open}
-      onClose={handleOnClose}
-      aria-labelledby="max-width-dialog-title"
-      style={{ zIndex: 999 }}
-    >
-      <DialogTitle id="max-width-dialog-title">Results</DialogTitle>
-      <DialogContent>
+    <SearchResults open={open} handleOnClose={handleOnClose} handleSave={handleSave} loading={editLoading}>
+      <>
         {!items || !items.length ? (
           <div>Search Did not find any shows. Please Try again</div>
         ) : (
@@ -116,17 +103,9 @@ const Results = ({ items, open, season, episode, onClose }: Props) => {
             </div>
           ))
         )}
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleOnClose} color="primary">
-          Cancel
-        </Button>
-        <LoadingButton onClick={handleSave} color="primary" loading={editLoading}>
-          Save
-        </LoadingButton>
-      </DialogActions>
-    </Dialog>
+      </>
+    </SearchResults>
   );
 };
 
-export default Results;
+export default ShowResults;

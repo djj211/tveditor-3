@@ -3,6 +3,8 @@ import makeStyles from '@mui/styles/makeStyles';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
+import { SELECTED_MEDIA, useMedia } from '../../../Context/media.context';
+
 const useStyles = makeStyles(() => ({
   button: {
     minWidth: 105,
@@ -10,24 +12,26 @@ const useStyles = makeStyles(() => ({
 }));
 
 const MediaToggle = () => {
+  const { selectedMedia, setSelectedMediaType } = useMedia();
+
   const enableMovies =
     process.env.REACT_APP_ENABLE_MOVIES && process.env.REACT_APP_ENABLE_MOVIES.toLowerCase() === 'true';
 
   const classes = useStyles();
-  const [alignment, setAlignment] = React.useState('tv');
 
-  const handleChange = (_event: React.MouseEvent<HTMLElement, MouseEvent>, newAlignment: string) => {
-    setAlignment(newAlignment);
+  const handleChange = (_event: React.MouseEvent<HTMLElement, MouseEvent>, newMedia: SELECTED_MEDIA) => {
+    console.log(newMedia);
+    setSelectedMediaType(newMedia);
   };
 
   if (!enableMovies) return null;
 
   return (
-    <ToggleButtonGroup color="primary" value={alignment} exclusive onChange={handleChange}>
-      <ToggleButton className={classes.button} value="tv">
+    <ToggleButtonGroup color="primary" value={selectedMedia} exclusive onChange={handleChange}>
+      <ToggleButton className={classes.button} value={SELECTED_MEDIA.SHOWS}>
         Television
       </ToggleButton>
-      <ToggleButton className={classes.button} value="movies">
+      <ToggleButton className={classes.button} value={SELECTED_MEDIA.MOVIE}>
         Movies
       </ToggleButton>
     </ToggleButtonGroup>

@@ -63,7 +63,7 @@ const Actions = ({ onAddClick }: Props) => {
       <Tooltip title="Add Show">
         <AddButton onClick={onAddClick} className={classes.addButton} />
       </Tooltip>
-      <SpeedDial actions={delugeSpeedDial} icon={<GetAppIcon />} />
+      {enableDeluge && <SpeedDial actions={delugeSpeedDial} icon={<GetAppIcon />} />}
     </div>
   );
 };

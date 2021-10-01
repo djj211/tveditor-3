@@ -1,20 +1,14 @@
 import React from 'react';
-import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import makeStyles from '@mui/styles/makeStyles';
 
-import Results from './Results';
-import { useShows } from '../../Context/shows.context';
-import { TVDBItem } from '../../interfaces';
-import EpisodeSetter from '../EpisodeSetter';
-import LoadingButton from '../LoadingButton';
-import Dialog from '../Dialog';
+import ShowResults from './ShowResults';
+import { useMedia } from '../../../Context/media.context';
+import { TVDBShowItem } from '../../../interfaces';
+import EpisodeSetter from './EpisodeSetter';
+import SearchDialog from '../../../components/SearchDialog';
 
 const useStyles = makeStyles(() => ({
   episodeSetter: {
@@ -28,9 +22,9 @@ interface Props {
 }
 
 const ShowSearch = ({ open, handleClose }: Props) => {
-  const { searchLoading, searchShows } = useShows();
+  const { searchLoading, searchShows } = useMedia();
   const [showName, setShowName] = React.useState<string>();
-  const [foundShows, setFoundShows] = React.useState<TVDBItem[]>([]);
+  const [foundShows, setFoundShows] = React.useState<TVDBShowItem[]>([]);
   const [showResults, setShowResults] = React.useState(false);
   const [overrideStart, setOverridStart] = React.useState(false);
   const [season, setSeason] = React.useState<number>(1);
@@ -42,12 +36,6 @@ const ShowSearch = ({ open, handleClose }: Props) => {
     setSeason(1);
     setEpisode(1);
   };
-
-  React.useEffect(() => {
-    if (open) {
-      reset();
-    }
-  }, [open]);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -74,10 +62,15 @@ const ShowSearch = ({ open, handleClose }: Props) => {
 
   return (
     <>
-      <Dialog open={open} onClose={onClose} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Search</DialogTitle>
-        <DialogContent>
-          <DialogContentText>Enter Name of Show to Perform a Search</DialogContentText>
+      <SearchDialog
+        formName="searchForm"
+        subTitle="Enter Name of Show to Perform a Search"
+        open={open}
+        handleClose={onClose}
+        loading={searchLoading}
+        onReset={reset}
+      >
+        <>
           <form onSubmit={(e) => onSubmit(e)} id="searchForm">
             <TextField
               autoFocus
@@ -110,17 +103,9 @@ const ShowSearch = ({ open, handleClose }: Props) => {
               />
             </div>
           </form>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={onClose} color="primary" disabled={searchLoading}>
-            Cancel
-          </Button>
-          <LoadingButton type="submit" color="primary" form="searchForm" loading={searchLoading}>
-            Search
-          </LoadingButton>
-        </DialogActions>
-      </Dialog>
-      <Results
+        </>
+      </SearchDialog>
+      <ShowResults
         items={foundShows}
         open={showResults}
         onClose={() => setShowResults(false)}

@@ -18,7 +18,7 @@ interface Props {
 
 const SpeedDial = ({ actions, icon }: Props) => {
   return (
-    <Box sx={{ height: 320, transform: 'translateZ(0px)', flexGrow: 1 }}>
+    <Box sx={{ transform: 'translateZ(0px)', flexGrow: 1 }}>
       <MuiSpeedDial ariaLabel="Deluge" icon={<SpeedDialIcon icon={icon} openIcon={<CloseIcon />} />}>
         {actions.map((action) => (
           <SpeedDialAction key={action.name} icon={action.icon} tooltipTitle={action.name} />

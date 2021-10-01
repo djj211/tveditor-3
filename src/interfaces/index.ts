@@ -1,113 +1,135 @@
 export interface Episode {
-    season: number;
-    number: number;
+  season: number;
+  number: number;
 }
 
 export interface FlexgetLastSeen extends Episode {
-    first_seen?: string;
+  first_seen?: string;
 }
 
 export interface TVDBepisode extends Episode {
-    airDate?: string;
+  airDate?: string;
 }
 
-export interface FlexgetShow {
-    id: number;
-    name: string;
-    begin_episode?: Episode;
-    latest_entity?: FlexgetLastSeen;
+interface BaseFlexgetItem {
+  id: number;
+  name: string;
 }
 
-export interface TVDBItem {
-    aliases: string[];
-    id: string;
-    name: string;
-    network?: string;
-    image_url: string;
-    status: string;
-    overview?: string;
-    latestEpisode?: TVDBepisode;
-    nextEpisode?: TVDBepisode;
+export interface FlexgetShow extends BaseFlexgetItem {
+  begin_episode?: Episode;
+  latest_entity?: FlexgetLastSeen;
+}
+
+interface TVDBBaseItem {
+  id: string;
+  name: string;
+  image_url: string;
+  overview?: string;
+}
+
+export interface TVDBShowItem extends TVDBBaseItem {
+  aliases: string[];
+  network?: string;
+  status: string;
+  latestEpisode?: TVDBepisode;
+  nextEpisode?: TVDBepisode;
+}
+
+export interface FlexgetMovie extends BaseFlexgetItem {
+  added_on: string;
+  list_id: number;
+  year: number;
+  movies_list_ids: number[];
+}
+
+export interface TVDBMovieItem extends TVDBBaseItem {
+  releaseDate: string;
+}
+
+export interface Movie {
+  flexget: FlexgetMovie;
+  tvdb: TVDBMovieItem;
 }
 
 export interface Show {
-    flexget: FlexgetShow;
-    tvdb: TVDBItem;
+  flexget: FlexgetShow;
+  tvdb: TVDBShowItem;
 }
 
 export interface FlexgetTask {
-    config: {
-        content_filter: {
-            reject: string[],
-            require_mainfile: boolean,
-            strict: boolean
+  config: {
+    content_filter: {
+      reject: string[];
+      require_mainfile: boolean;
+      strict: boolean;
+    };
+    deluge: {
+      label: string;
+      main_file_only: boolean;
+    };
+    discover: {
+      from: [
+        {
+          rarbg: {
+            category: number[];
+            limit: number;
+            min_leechers: number;
+            min_seeders: number;
+            ranked: boolean;
+            sorted_by: string;
+            use_tvdb: boolean;
+          };
         },
-        deluge: {
-            label: string,
-            main_file_only: boolean
+        {
+          '1337x': boolean;
         },
-        discover: {
-            from: [
-                {
-                    rarbg: {
-                        category: number[],
-                        limit: number,
-                        min_leechers: number,
-                        min_seeders: number,
-                        ranked: boolean,
-                        sorted_by: string,
-                        use_tvdb: boolean
-                    }
-                },
-                {
-                    "1337x": boolean
-                },
-                {
-                    limetorrents: {
-                        category: string,
-                        order_by: string
-                    }
-                }
-            ],
-            interval: string,
-            release_estimations: string,
-            what: [
-                {
-                    next_series_episodes: {
-                        backfill: boolean,
-                        from_start: boolean,
-                        only_same_season: boolean
-                    }
-                }
-            ]
+        {
+          limetorrents: {
+            category: string;
+            order_by: string;
+          };
         },
-        no_entries_ok: boolean,
-        series: {
-            default: string[],
-            settings: {
-                default: {
-                    propers: boolean,
-                    set: {
-                        content_filename: string,
-                        move_completed_path: string
-                    },
-                    target: string,
-                    timeframe: string,
-                    upgrade: boolean
-                }
-            }
+      ];
+      interval: string;
+      release_estimations: string;
+      what: [
+        {
+          next_series_episodes: {
+            backfill: boolean;
+            from_start: boolean;
+            only_same_season: boolean;
+          };
         },
-        template: string
-    },
-    name: string;
+      ];
+    };
+    no_entries_ok: boolean;
+    series: {
+      default: string[];
+      settings: {
+        default: {
+          propers: boolean;
+          set: {
+            content_filename: string;
+            move_completed_path: string;
+          };
+          target: string;
+          timeframe: string;
+          upgrade: boolean;
+        };
+      };
+    };
+    template: string;
+  };
+  name: string;
 }
 
 export interface CreateFlexget {
-    begin_episode: string;
-    name: string;
-    alternate_names?: string[];
+  begin_episode: string;
+  name: string;
+  alternate_names?: string[];
 }
 
 export interface DecodedToken {
-    exp: number
+  exp: number;
 }
