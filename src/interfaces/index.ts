@@ -133,3 +133,48 @@ export interface CreateFlexget {
 export interface DecodedToken {
   exp: number;
 }
+
+export enum DELUGE_DOWNLOAD_TYPE {
+  MOVIE = 'movie',
+  SHOW = 'show',
+}
+
+export interface DownloadOptions {
+  appendPath?: string;
+}
+
+interface BaseDelugeDownload {
+  downloadType?: DELUGE_DOWNLOAD_TYPE;
+  options?: DownloadOptions;
+}
+
+export interface DelugeDownload extends BaseDelugeDownload {
+  magnetUrl: string;
+}
+
+export enum TORRENT_SEARCH_TYPE {
+  MOVIES = 'Movies',
+  SHOWS = 'TV',
+  ALL = 'ALL',
+}
+
+export interface TorrentSearch {
+  query: string;
+  limit: number;
+  type?: TORRENT_SEARCH_TYPE;
+}
+
+export interface Torrent {
+  title: string;
+  time: string;
+  size: string;
+  magnet: string;
+  desc: string;
+  provider: string;
+  seeds?: number;
+  peers?: number;
+}
+
+export interface TorrentSearchDownload extends BaseDelugeDownload {
+  torrent: Torrent;
+}

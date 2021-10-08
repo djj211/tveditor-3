@@ -8,6 +8,9 @@ import makeStyles from '@mui/styles/makeStyles';
 import AddButton from '../../../components/FabButton/AddButton';
 import SpeedDial from '../../../components/SpeedDial';
 import Tooltip from '@mui/material/Tooltip';
+import AddMovieTorrent from './AddMovieTorrent';
+import AddShowTorrent from './AddShowTorrent';
+import TorrentSearch from './TorrentSearch';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -28,6 +31,10 @@ interface Props {
 }
 
 const Actions = ({ onAddClick }: Props) => {
+  const [movieTorrentOpen, setMovieTorrentOpen] = React.useState(false);
+  const [showTorrentOpen, setShowTorrentOpen] = React.useState(false);
+  const [torrentSearchOpen, setTorrentSearchOpen] = React.useState(false);
+
   const enableDeluge =
     process.env.REACT_APP_ENABLE_DELUGE_CONTROLS &&
     process.env.REACT_APP_ENABLE_DELUGE_CONTROLS.toLowerCase() === 'true';
@@ -39,32 +46,37 @@ const Actions = ({ onAddClick }: Props) => {
       icon: <SearchIcon />,
       name: 'Torrent Search',
       onClick: () => {
-        console.log('hello');
+        setTorrentSearchOpen(true);
       },
     },
     {
       icon: <TvIcon />,
       name: 'Add TV Show Torrent',
       onClick: () => {
-        console.log('hello');
+        setShowTorrentOpen(true);
       },
     },
     {
       icon: <MovieIcon />,
       name: 'Add Movie Torrent',
       onClick: () => {
-        console.log('hello');
+        setMovieTorrentOpen(true);
       },
     },
   ];
 
   return (
-    <div className={classes.root}>
-      <Tooltip title="Add Show">
-        <AddButton onClick={onAddClick} className={classes.addButton} />
-      </Tooltip>
-      {enableDeluge && <SpeedDial actions={delugeSpeedDial} icon={<GetAppIcon />} />}
-    </div>
+    <>
+      <div className={classes.root}>
+        <Tooltip title="Add Show">
+          <AddButton onClick={onAddClick} className={classes.addButton} />
+        </Tooltip>
+        {enableDeluge && <SpeedDial actions={delugeSpeedDial} icon={<GetAppIcon />} />}
+      </div>
+      <AddMovieTorrent open={movieTorrentOpen} handleClose={() => setMovieTorrentOpen(false)} />
+      <AddShowTorrent open={showTorrentOpen} handleClose={() => setShowTorrentOpen(false)} />
+      {torrentSearchOpen && <TorrentSearch open={torrentSearchOpen} onClose={() => setTorrentSearchOpen(false)} />}
+    </>
   );
 };
 

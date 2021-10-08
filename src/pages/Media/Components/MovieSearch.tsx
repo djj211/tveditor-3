@@ -3,7 +3,7 @@ import TextField from '@mui/material/TextField';
 
 import { useMedia } from '../../../Context/media.context';
 import { TVDBMovieItem } from '../../../interfaces';
-import SearchDialog from '../../../components/SearchDialog';
+import ActionDialog from '../../../components/ActionDialog';
 import MovieResults from './MovieResults';
 
 interface Props {
@@ -36,12 +36,14 @@ const MovieSearch = ({ open, handleClose }: Props) => {
 
   return (
     <>
-      <SearchDialog
+      <ActionDialog
         formName="searchForm"
         subTitle="Enter Name of Movie to Perform a Search"
         open={open}
         handleClose={onClose}
         loading={searchLoading}
+        title="Download Show Torrent"
+        submitButtonText="Download"
       >
         <>
           <form onSubmit={(e) => onSubmit(e)} id="searchForm">
@@ -57,7 +59,7 @@ const MovieSearch = ({ open, handleClose }: Props) => {
             />
           </form>
         </>
-      </SearchDialog>
+      </ActionDialog>
       <MovieResults items={foundMovies} open={showResults} onClose={() => setShowResults(false)} />
     </>
   );

@@ -8,7 +8,7 @@ import ShowResults from './ShowResults';
 import { useMedia } from '../../../Context/media.context';
 import { TVDBShowItem } from '../../../interfaces';
 import EpisodeSetter from './EpisodeSetter';
-import SearchDialog from '../../../components/SearchDialog';
+import ActionDialog from '../../../components/ActionDialog';
 
 const useStyles = makeStyles(() => ({
   episodeSetter: {
@@ -62,13 +62,15 @@ const ShowSearch = ({ open, handleClose }: Props) => {
 
   return (
     <>
-      <SearchDialog
+      <ActionDialog
         formName="searchForm"
         subTitle="Enter Name of Show to Perform a Search"
         open={open}
         handleClose={onClose}
         loading={searchLoading}
         onReset={reset}
+        title="Search"
+        submitButtonText="Search"
       >
         <>
           <form onSubmit={(e) => onSubmit(e)} id="searchForm">
@@ -104,7 +106,7 @@ const ShowSearch = ({ open, handleClose }: Props) => {
             </div>
           </form>
         </>
-      </SearchDialog>
+      </ActionDialog>
       <ShowResults
         items={foundShows}
         open={showResults}

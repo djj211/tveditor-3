@@ -43,7 +43,7 @@ const AuthContextProvider = ({ children }: { children?: React.ReactNode }) => {
     setIsAuthenticated(authenticated);
   }, [checkAuthenticated, setIsAuthenticated]);
 
-  const getToken = async () => {
+  const getToken = React.useCallback(async () => {
     const token = localStorage.getItem('authToken');
     // Is there a token in storage and has it expired.
     // If not return the token
@@ -73,7 +73,7 @@ const AuthContextProvider = ({ children }: { children?: React.ReactNode }) => {
 
     setIsAuthenticated(false);
     return;
-  };
+  }, [post]);
 
   const login = async (username: string, password: string) => {
     const data = await post<{ token: string; refreshToken: string }, { username: string; password: string }>('login', {

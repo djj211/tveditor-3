@@ -12,13 +12,25 @@ interface Props {
   formName: string;
   loading: boolean;
   subTitle: string;
+  title: string;
   children: React.ReactChild;
   open: boolean;
+  submitButtonText: string;
   handleClose: () => void;
   onReset?: () => void;
 }
 
-const Search = ({ formName, open, handleClose, children, onReset, loading, subTitle }: Props) => {
+const ActionDialog = ({
+  formName,
+  open,
+  handleClose,
+  children,
+  onReset,
+  loading,
+  subTitle,
+  title,
+  submitButtonText,
+}: Props) => {
   React.useEffect(() => {
     if (open && onReset) {
       onReset();
@@ -27,7 +39,7 @@ const Search = ({ formName, open, handleClose, children, onReset, loading, subTi
 
   return (
     <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-      <DialogTitle id="form-dialog-title">Search</DialogTitle>
+      <DialogTitle id="form-dialog-title">{title}</DialogTitle>
       <DialogContent>
         <DialogContentText>{subTitle}</DialogContentText>
         {children}
@@ -37,11 +49,11 @@ const Search = ({ formName, open, handleClose, children, onReset, loading, subTi
           Cancel
         </Button>
         <LoadingButton type="submit" color="primary" form={formName} loading={loading}>
-          Search
+          {submitButtonText}
         </LoadingButton>
       </DialogActions>
     </Dialog>
   );
 };
 
-export default Search;
+export default ActionDialog;

@@ -9,12 +9,24 @@ import Dialog from '../Dialog';
 interface Props {
   open: boolean;
   loading: boolean;
+  disabled?: boolean;
   children: React.ReactChild;
   handleSave: () => Promise<void>;
   handleOnClose: () => void;
+  title?: string;
+  saveText?: string;
 }
 
-const Results = ({ open, loading, handleOnClose, handleSave, children }: Props) => {
+const Results = ({
+  open,
+  loading,
+  handleOnClose,
+  handleSave,
+  children,
+  title = 'Results',
+  saveText = 'Save',
+  disabled,
+}: Props) => {
   return (
     <Dialog
       fullWidth
@@ -24,14 +36,14 @@ const Results = ({ open, loading, handleOnClose, handleSave, children }: Props) 
       aria-labelledby="max-width-dialog-title"
       style={{ zIndex: 999 }}
     >
-      <DialogTitle id="max-width-dialog-title">Results</DialogTitle>
+      <DialogTitle id="max-width-dialog-title">{title}</DialogTitle>
       <DialogContent>{children}</DialogContent>
       <DialogActions>
-        <Button onClick={handleOnClose} color="primary">
+        <Button onClick={handleOnClose} disabled={disabled} color="primary">
           Cancel
         </Button>
-        <LoadingButton onClick={handleSave} color="primary" loading={loading}>
-          Save
+        <LoadingButton onClick={handleSave} disabled={disabled} color="primary" loading={loading}>
+          {saveText}
         </LoadingButton>
       </DialogActions>
     </Dialog>

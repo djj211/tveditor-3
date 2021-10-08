@@ -21,7 +21,7 @@ const SpeedDial = ({ actions, icon }: Props) => {
     <Box sx={{ transform: 'translateZ(0px)', flexGrow: 1 }}>
       <MuiSpeedDial ariaLabel="Deluge" icon={<SpeedDialIcon icon={icon} openIcon={<CloseIcon />} />}>
         {actions.map((action) => (
-          <SpeedDialAction key={action.name} icon={action.icon} tooltipTitle={action.name} />
+          <SpeedDialAction key={action.name} icon={action.icon} tooltipTitle={action.name} onClick={action.onClick} />
         ))}
       </MuiSpeedDial>
     </Box>

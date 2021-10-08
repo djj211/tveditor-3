@@ -1,10 +1,5 @@
-import { AxiosRequestConfig } from 'axios';
-
-import { useApi } from './useApi';
-import { useAuth } from '../Context/auth.context';
 import { Show, FlexgetShow, TVDBShowItem, Movie, TVDBMovieItem } from '../interfaces';
-
-const BASE_URL = `${process.env.REACT_APP_PROXY_API_URL!}/api`;
+import { useProxyBase } from './useProxyBase';
 
 interface CreateShow {
   name: string;
@@ -20,19 +15,10 @@ interface CreateMovie {
 }
 
 export const useProxy = () => {
-  const { get, post, put, del } = useApi(BASE_URL);
-  const { getToken } = useAuth();
-
-  const getConfig = async (): Promise<AxiosRequestConfig> => {
-    const token = await getToken();
-    return {
-      headers: { Authorization: `Bearer ${token}` },
-    };
-  };
+  const { get, post, put, del } = useProxyBase();
 
   const getShows = async () => {
-    const config = await getConfig();
-    return get<Show[]>('shows', config);
+    return get<Show[]>('shows');
   };
 
   const addShow = async (name: string, season: number, episode: number, tvdbId: string) => {
@@ -42,8 +28,7 @@ export const useProxy = () => {
       episode,
       tvdbId,
     };
-    const config = await getConfig();
-    return post<FlexgetShow, CreateShow>('shows', show, config);
+    return post<FlexgetShow, CreateShow>('shows', show);
   };
 
   const editShow = async (showId: number, name: string, season: number, episode: number, tvdbId: string) => {
@@ -53,18 +38,15 @@ export const useProxy = () => {
       episode,
       tvdbId,
     };
-    const config = await getConfig();
-    return put<FlexgetShow, CreateShow>(`/shows/${showId}`, show, config);
+    return put<FlexgetShow, CreateShow>(`/shows/${showId}`, show);
   };
 
   const deleteShow = async (showId: number) => {
-    const config = await getConfig();
-    return del<FlexgetShow>(`/shows/${showId}`, config);
+    return del<FlexgetShow>(`/shows/${showId}`);
   };
 
   const searchShows = async (show: string): Promise<TVDBShowItem[]> => {
-    const config = await getConfig();
-    return get<TVDBShowItem[]>(`search/shows?queryStr=${show}`, config);
+    return get<TVDBShowItem[]>(`search/shows?queryStr=${show}`);
   };
 
   const addMovie = async (name: string, year: number, tvdbId: string) => {
@@ -73,23 +55,19 @@ export const useProxy = () => {
       year,
       tvdbId,
     };
-    const config = await getConfig();
-    return post<FlexgetShow, CreateMovie>('movies', movie, config);
+    return post<FlexgetShow, CreateMovie>('movies', movie);
   };
 
   const searchMovies = async (movie: string): Promise<TVDBMovieItem[]> => {
-    const config = await getConfig();
-    return get<TVDBMovieItem[]>(`search/movies?queryStr=${movie}`, config);
+    return get<TVDBMovieItem[]>(`search/movies?queryStr=${movie}`);
   };
 
   const getMovies = async () => {
-    const config = await getConfig();
-    return get<Movie[]>('movies', config);
+    return get<Movie[]>('movies');
   };
 
   const deleteMovie = async (movieId: number) => {
-    const config = await getConfig();
-    return del<FlexgetShow>(`/movies/${movieId}`, config);
+    return del<FlexgetShow>(`/movies/${movieId}`);
   };
 
   const editMovie = async (movieId: number, name: string, year: number, tvdbId: string) => {
@@ -98,8 +76,7 @@ export const useProxy = () => {
       year,
       tvdbId,
     };
-    const config = await getConfig();
-    return put<FlexgetShow, CreateMovie>(`/movies/${movieId}`, movie, config);
+    return put<FlexgetShow, CreateMovie>(`/movies/${movieId}`, movie);
   };
 
   return {

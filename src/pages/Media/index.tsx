@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Typography } from '@mui/material';
+import { Container } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import CircularProgress from '@mui/material/CircularProgress';
 
@@ -55,9 +55,6 @@ const Media = () => {
       <Container className={classes.root} maxWidth="lg">
         <div className={classes.header}>
           <MediaToggle />
-          <Typography variant="h4">{`Manage ${
-            selectedMedia === SELECTED_MEDIA.SHOWS ? 'Shows' : 'Movies'
-          }`}</Typography>
         </div>
         {refreshLoading ? (
           <div className={classes.loading}>
