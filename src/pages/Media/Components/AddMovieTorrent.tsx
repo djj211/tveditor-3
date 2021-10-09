@@ -19,7 +19,6 @@ const AddMovieTorrent = ({ open, handleClose }: Props) => {
     if (loading) return;
     if (magnetUrl) {
       const resp = await addTorrent(magnetUrl, DELUGE_DOWNLOAD_TYPE.MOVIE);
-      console.log(resp);
       onClose();
     }
   };
@@ -43,7 +42,6 @@ const AddMovieTorrent = ({ open, handleClose }: Props) => {
       <>
         <form onSubmit={(e) => onSubmit(e)} id="movieTorrent">
           <TextField
-            autoFocus
             margin="dense"
             id="movie"
             label="Magnet URL"

@@ -20,7 +20,6 @@ const MediaToggle = () => {
   const classes = useStyles();
 
   const handleChange = (_event: React.MouseEvent<HTMLElement, MouseEvent>, newMedia: SELECTED_MEDIA) => {
-    console.log(newMedia);
     setSelectedMediaType(newMedia);
   };
 

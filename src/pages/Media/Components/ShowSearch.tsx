@@ -74,7 +74,6 @@ const ShowSearch = ({ open, handleClose }: Props) => {
         <>
           <form onSubmit={(e) => onSubmit(e)} id="searchForm">
             <TextField
-              autoFocus
               margin="dense"
               id="show"
               label="Show Name"

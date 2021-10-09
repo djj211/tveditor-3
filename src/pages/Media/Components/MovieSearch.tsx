@@ -48,7 +48,6 @@ const MovieSearch = ({ open, handleClose }: Props) => {
         <>
           <form onSubmit={(e) => onSubmit(e)} id="searchForm">
             <TextField
-              autoFocus
               margin="dense"
               id="movie"
               label="Movie Name"

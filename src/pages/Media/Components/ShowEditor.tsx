@@ -151,7 +151,6 @@ const ShowEditor = ({ item, open, handleClose }: Props) => {
 
           <Typography variant="h6">Override TVDB Name</Typography>
           <TextField
-            autoFocus
             margin="dense"
             id="show"
             label="Show Name"

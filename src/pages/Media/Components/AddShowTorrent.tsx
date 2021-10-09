@@ -31,9 +31,7 @@ const AddShowTorrent = ({ open, handleClose }: Props) => {
     if (loading) return;
     if (magnetUrl && showName && season) {
       const appendPath = `${showName}/Season ${season}`;
-      console.log(appendPath);
       const resp = await addTorrent(magnetUrl, DELUGE_DOWNLOAD_TYPE.SHOW, appendPath);
-      console.log(resp);
       onClose();
     }
   };
@@ -58,7 +56,6 @@ const AddShowTorrent = ({ open, handleClose }: Props) => {
       <>
         <form onSubmit={(e) => onSubmit(e)} id="showTorrent">
           <TextField
-            autoFocus
             margin="dense"
             id="movie"
             label="Magnet URL"
@@ -68,7 +65,6 @@ const AddShowTorrent = ({ open, handleClose }: Props) => {
             disabled={loading}
           />
           <TextField
-            autoFocus
             margin="dense"
             id="showName"
             label="Show Name"

@@ -27,9 +27,10 @@ const Item = ({ item }: Props) => {
         posterClick={onPosterClick}
         hoverEffect
       />
-      {selectedMedia === SELECTED_MEDIA.SHOWS ? (
+      {selectedMedia === SELECTED_MEDIA.SHOWS && editOpen && (
         <ShowEditor item={item as Show} open={editOpen} handleClose={() => setEditOpen(false)} />
-      ) : (
+      )}
+      {selectedMedia === SELECTED_MEDIA.MOVIE && editOpen && (
         <MovieEditor item={item as Movie} open={editOpen} handleClose={() => setEditOpen(false)} />
       )}
     </>

@@ -106,7 +106,6 @@ const MovieEditor = ({ item, open, handleClose }: Props) => {
         <form onSubmit={(e) => onSubmit(e)} id="movieForm">
           <Typography variant="h6">Override TVDB Name</Typography>
           <TextField
-            autoFocus
             margin="dense"
             id="movie"
             label="Movie Name"

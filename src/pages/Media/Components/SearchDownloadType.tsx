@@ -91,7 +91,6 @@ const SearchDownloadType = ({ torrent, open, handleClose }: Props) => {
         {downloadType === DELUGE_DOWNLOAD_TYPE.SHOW && (
           <>
             <TextField
-              autoFocus
               margin="dense"
               id="showName"
               label="Show Name"
