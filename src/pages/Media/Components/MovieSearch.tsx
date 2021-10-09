@@ -13,24 +13,24 @@ interface Props {
 
 const MovieSearch = ({ open, handleClose }: Props) => {
   const { searchLoading, searchMovies } = useMedia();
-  const [movieName, setMovieName] = React.useState<string>();
   const [foundMovies, setFoundMovies] = React.useState<TVDBMovieItem[]>([]);
   const [showResults, setShowResults] = React.useState(false);
+  const searchInputRef = React.useRef<HTMLInputElement | null>(null);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (searchLoading) return;
-    if (movieName) {
-      const movies = await searchMovies(movieName);
-      setFoundMovies(movies ?? []);
-      setShowResults(true);
-      onClose();
-    }
+
+    if (searchLoading || !searchInputRef?.current?.value) return;
+
+    const movies = await searchMovies(searchInputRef.current.value);
+    setFoundMovies(movies ?? []);
+    setShowResults(true);
+    onClose();
   };
 
   const onClose = () => {
     if (searchLoading) return;
-    setMovieName('');
+
     handleClose();
   };
 
@@ -53,9 +53,9 @@ const MovieSearch = ({ open, handleClose }: Props) => {
               id="movie"
               label="Movie Name"
               fullWidth
-              onChange={(e) => setMovieName(e.currentTarget.value)}
               required
               disabled={searchLoading}
+              inputRef={searchInputRef}
             />
           </form>
         </>

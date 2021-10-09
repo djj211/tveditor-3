@@ -59,8 +59,8 @@ const TorrentSearch = ({ onClose, open }: Props) => {
   const classes = useStyles();
   const [selected, setSelected] = React.useState<Torrent>();
   const [torrentType, setTorrentType] = React.useState(TORRENT_SEARCH_TYPE.SHOWS);
-  const [searchTerm, setSearchTerm] = React.useState('');
   const [showTypeSelect, setShowTypeSelect] = React.useState(false);
+  const searchInputRef = React.useRef<HTMLInputElement | null>(null);
 
   const { searchTorrent, searchLoading, searchedTorrents } = useTorrents();
   const { addToast } = useToasts();
@@ -98,12 +98,10 @@ const TorrentSearch = ({ onClose, open }: Props) => {
   };
 
   const doSearch = React.useCallback(() => {
-    if (searchLoading) return;
-
-    if (torrentType && searchTerm) {
-      searchTorrent(searchTerm, 500, torrentType);
-    }
-  }, [searchLoading, searchTorrent, searchTerm, torrentType]);
+    if (searchLoading || !searchInputRef?.current?.value || !torrentType) return;
+    searchTorrent(searchInputRef.current.value, 500, torrentType);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchTorrent]);
 
   const handleSave = async () => {
     if (selected?.title) {
@@ -164,7 +162,7 @@ const TorrentSearch = ({ onClose, open }: Props) => {
             <InputLabel htmlFor="search-torrent">Search</InputLabel>
             <Input
               id="search-torrent"
-              onChange={(e) => setSearchTerm(e.currentTarget.value)}
+              inputRef={searchInputRef}
               disabled={searchLoading}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {

@@ -74,6 +74,10 @@ const ItemEditor = ({
     handleClose();
   };
 
+  const onCancel = () => {
+    setConfirmOpen(false);
+  };
+
   return (
     <>
       <Dialog open={open} onClose={onClose} aria-labelledby="form-dialog-title">
@@ -102,7 +106,7 @@ const ItemEditor = ({
       <ConfirmDialog
         open={confirmOpen}
         onConfirm={onDelete}
-        onCancel={onClose}
+        onCancel={onCancel}
         loading={deleteLoading}
         title={deleteTitle}
         bodyText={deleteMsg}

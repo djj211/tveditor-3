@@ -38,7 +38,7 @@ interface Props {
 const MovieEditor = ({ item, open, handleClose }: Props) => {
   const classes = useStyles();
   const [year, setYear] = React.useState<Date | null>();
-  const [name, setName] = React.useState<string>();
+  const nameRef = React.useRef<HTMLInputElement | null>(null);
 
   const { deleteMovie, editMovie, editLoading, deleteLoading } = useMedia();
   const { addToast } = useToasts();
@@ -48,7 +48,6 @@ const MovieEditor = ({ item, open, handleClose }: Props) => {
       const date = new Date(`01/02/${item.flexget.year}`);
       setYear(date);
     }
-    setName(item.flexget.name);
   }, [item]);
 
   const onClose = () => {
@@ -58,11 +57,12 @@ const MovieEditor = ({ item, open, handleClose }: Props) => {
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (year && name && !editLoading && !deleteLoading) {
-      await editMovie(item.flexget.id, name, year.getFullYear(), item.tvdb.id);
-      addToast(`Movie ${item.flexget.name} Saved Successfully`, { appearance: 'success' });
-      handleClose();
-    }
+
+    if (!year || !nameRef?.current?.value || editLoading || deleteLoading) return;
+
+    await editMovie(item.flexget.id, nameRef.current.value, year.getFullYear(), item.tvdb.id);
+    addToast(`Movie ${item.flexget.name} Saved Successfully`, { appearance: 'success' });
+    handleClose();
   };
 
   const doDelete = async () => {
@@ -110,10 +110,10 @@ const MovieEditor = ({ item, open, handleClose }: Props) => {
             margin="dense"
             id="movie"
             label="Movie Name"
-            onChange={(e) => setName(e.currentTarget.value)}
             required
             defaultValue={item.flexget.name}
             disabled={editLoading || deleteLoading}
+            inputRef={nameRef}
             fullWidth
           />
           <Typography variant="h6">Override TVDB Year</Typography>

@@ -47,8 +47,7 @@ const Media = () => {
     } else if (selectedMedia === SELECTED_MEDIA.SHOWS) {
       refreshShows();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedMedia]);
+  }, [selectedMedia, refreshMovies, refreshShows]);
 
   return (
     <>

@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { Show, FlexgetShow, TVDBShowItem, Movie, TVDBMovieItem } from '../interfaces';
 import { useProxyBase } from './useProxyBase';
 
@@ -17,9 +19,9 @@ interface CreateMovie {
 export const useProxy = () => {
   const { get, post, put, del } = useProxyBase();
 
-  const getShows = async () => {
+  const getShows = React.useCallback(async () => {
     return get<Show[]>('shows');
-  };
+  }, [get]);
 
   const addShow = async (name: string, season: number, episode: number, tvdbId: string) => {
     const show: CreateShow = {
@@ -62,9 +64,9 @@ export const useProxy = () => {
     return get<TVDBMovieItem[]>(`search/movies?queryStr=${movie}`);
   };
 
-  const getMovies = async () => {
+  const getMovies = React.useCallback(async () => {
     return get<Movie[]>('movies');
-  };
+  }, [get]);
 
   const deleteMovie = async (movieId: number) => {
     return del<FlexgetShow>(`/movies/${movieId}`);

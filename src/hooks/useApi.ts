@@ -13,10 +13,13 @@ export const useApi = (baseUrl: string) => {
     [baseUrl],
   );
 
-  const get = async <T>(path: string, config: AxiosRequestConfig): Promise<T> => {
-    const resp = await axios.get<T>(getUrl(path), config);
-    return resp.data;
-  };
+  const get = React.useCallback(
+    async <T>(path: string, config: AxiosRequestConfig): Promise<T> => {
+      const resp = await axios.get<T>(getUrl(path), config);
+      return resp.data;
+    },
+    [getUrl],
+  );
 
   const post = React.useCallback(
     async <T, TData>(path: string, data?: TData, config?: AxiosRequestConfig): Promise<T> => {

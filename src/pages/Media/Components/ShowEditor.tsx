@@ -40,7 +40,7 @@ const ShowEditor = ({ item, open, handleClose }: Props) => {
   const classes = useStyles();
   const [season, setSeason] = React.useState<number>();
   const [episode, setEpisode] = React.useState<number>();
-  const [name, setName] = React.useState<string>();
+  const nameRef = React.useRef<HTMLInputElement | null>(null);
 
   const { deleteShow, editShow, editLoading, deleteLoading } = useMedia();
   const { addToast } = useToasts();
@@ -48,7 +48,6 @@ const ShowEditor = ({ item, open, handleClose }: Props) => {
   React.useEffect(() => {
     setSeason(item.tvdb.nextEpisode?.season);
     setEpisode(item.tvdb.nextEpisode?.number);
-    setName(item.flexget.name);
   }, [item]);
 
   const onClose = () => {
@@ -60,11 +59,12 @@ const ShowEditor = ({ item, open, handleClose }: Props) => {
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (season && episode && name && !editLoading) {
-      await editShow(item.flexget.id, name, season, episode, item.tvdb.id);
-      addToast(`Show ${item.flexget.name} Saved Successfully`, { appearance: 'success' });
-      handleClose();
-    }
+
+    if (!season || !episode || !nameRef?.current?.value || editLoading) return;
+
+    await editShow(item.flexget.id, nameRef.current.value, season, episode, item.tvdb.id);
+    addToast(`Show ${item.flexget.name} Saved Successfully`, { appearance: 'success' });
+    handleClose();
   };
 
   const doDelete = async () => {
@@ -156,8 +156,8 @@ const ShowEditor = ({ item, open, handleClose }: Props) => {
             id="show"
             label="Show Name"
             fullWidth
-            onChange={(e) => setName(e.currentTarget.value)}
             required
+            inputRef={nameRef}
             defaultValue={item.flexget.name}
             disabled={editLoading}
           />

@@ -17,10 +17,13 @@ export const useProxyBase = () => {
     };
   }, [getToken]);
 
-  const get = async <T>(path: string): Promise<T> => {
-    const config = await getConfig();
-    return apiGet<T>(path, config);
-  };
+  const get = React.useCallback(
+    async <T>(path: string): Promise<T> => {
+      const config = await getConfig();
+      return apiGet<T>(path, config);
+    },
+    [getConfig, apiGet],
+  );
 
   const post = React.useCallback(
     async <T, TData>(path: string, data?: TData): Promise<T> => {

@@ -23,12 +23,12 @@ interface Props {
 
 const ShowSearch = ({ open, handleClose }: Props) => {
   const { searchLoading, searchShows } = useMedia();
-  const [showName, setShowName] = React.useState<string>();
   const [foundShows, setFoundShows] = React.useState<TVDBShowItem[]>([]);
   const [showResults, setShowResults] = React.useState(false);
   const [overrideStart, setOverridStart] = React.useState(false);
   const [season, setSeason] = React.useState<number>(1);
   const [episode, setEpisode] = React.useState<number>(1);
+  const searchInputRef = React.useRef<HTMLInputElement | null>(null);
 
   const classes = useStyles();
 
@@ -39,18 +39,17 @@ const ShowSearch = ({ open, handleClose }: Props) => {
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (searchLoading) return;
-    if (showName) {
-      const shows = await searchShows(showName);
-      setFoundShows(shows ?? []);
-      setShowResults(true);
-      onClose();
-    }
+
+    if (searchLoading || !searchInputRef?.current?.value) return;
+
+    const shows = await searchShows(searchInputRef.current.value);
+    setFoundShows(shows ?? []);
+    setShowResults(true);
+    onClose();
   };
 
   const onClose = () => {
     if (searchLoading) return;
-    setShowName('');
     setOverridStart(false);
     handleClose();
   };
@@ -80,8 +79,8 @@ const ShowSearch = ({ open, handleClose }: Props) => {
               id="show"
               label="Show Name"
               fullWidth
-              onChange={(e) => setShowName(e.currentTarget.value)}
               required
+              inputRef={searchInputRef}
               disabled={searchLoading}
             />
             <FormControlLabel
