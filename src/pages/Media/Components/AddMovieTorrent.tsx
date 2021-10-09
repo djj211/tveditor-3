@@ -18,7 +18,7 @@ const AddMovieTorrent = ({ open, handleClose }: Props) => {
     e.preventDefault();
     if (loading) return;
     if (magnetUrl) {
-      const resp = await addTorrent(magnetUrl, DELUGE_DOWNLOAD_TYPE.MOVIE);
+      await addTorrent(magnetUrl, DELUGE_DOWNLOAD_TYPE.MOVIE);
       onClose();
     }
   };

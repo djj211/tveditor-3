@@ -31,7 +31,7 @@ const AddShowTorrent = ({ open, handleClose }: Props) => {
     if (loading) return;
     if (magnetUrl && showName && season) {
       const appendPath = `${showName}/Season ${season}`;
-      const resp = await addTorrent(magnetUrl, DELUGE_DOWNLOAD_TYPE.SHOW, appendPath);
+      await addTorrent(magnetUrl, DELUGE_DOWNLOAD_TYPE.SHOW, appendPath);
       onClose();
     }
   };
