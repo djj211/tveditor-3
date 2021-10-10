@@ -42,8 +42,8 @@ const MovieSearch = ({ open, handleClose }: Props) => {
         open={open}
         handleClose={onClose}
         loading={searchLoading}
-        title="Download Show Torrent"
-        submitButtonText="Download"
+        title="Search"
+        submitButtonText="Search"
       >
         <>
           <form onSubmit={(e) => onSubmit(e)} id="searchForm">

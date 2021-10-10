@@ -99,7 +99,7 @@ const TorrentSearch = ({ onClose, open }: Props) => {
 
   const doSearch = React.useCallback(() => {
     if (searchLoading || !searchInputRef?.current?.value || !torrentType) return;
-    searchTorrent(searchInputRef.current.value, 500, torrentType);
+    searchTorrent(searchInputRef.current.value, 100, torrentType);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchTorrent]);
 
