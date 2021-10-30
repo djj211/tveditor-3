@@ -45,9 +45,12 @@ export const useTorrents = () => {
   );
 
   const searchTorrent = React.useCallback(
-    async (query: string, limit: number, type: TORRENT_SEARCH_TYPE) => {
+    async (query: string, limit: number, type: TORRENT_SEARCH_TYPE, provider?: string) => {
+      console.log(!!provider);
       setSearchLoading(true);
-      const resp = await get<Torrent[]>(`torrents/search?query=${query}&limit=${limit}&type=${type}`);
+      const resp = await get<Torrent[]>(
+        `torrents/search?query=${query}&limit=${limit}&type=${type}${!!provider ? `&provider=${provider}` : ''}`,
+      );
       setSearchedTorrents(resp);
       setSearchLoading(false);
     },

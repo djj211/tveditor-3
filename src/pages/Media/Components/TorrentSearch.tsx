@@ -24,11 +24,15 @@ import SearchResults from '../../../components/SearchResults';
 import SearchDownloadType from './SearchDownloadType';
 import { Torrent, TORRENT_SEARCH_TYPE } from '../../../interfaces';
 import { useTorrents } from '../../../hooks/useTorrents';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 
 const useStyles = makeStyles((theme) => ({
   typeContainer: {
     display: 'flex',
     justifyContent: 'center',
+    padding: 10,
+    alignItems: 'center',
   },
   selected: {
     cursor: 'pointer',
@@ -55,11 +59,26 @@ interface Props {
   onClose: () => void;
 }
 
+const PROVIDERS = [
+  '1337x',
+  'Eztv',
+  'KickassTorrents',
+  'Limetorrents',
+  'Rarbg',
+  'ThePirateBay',
+  'Torrent9',
+  'TorrentProject',
+  'Torrentz2',
+  'Yggtorrent',
+  'Yts',
+];
+
 const TorrentSearch = ({ onClose, open }: Props) => {
   const classes = useStyles();
   const [selected, setSelected] = React.useState<Torrent>();
   const [torrentType, setTorrentType] = React.useState(TORRENT_SEARCH_TYPE.SHOWS);
   const [showTypeSelect, setShowTypeSelect] = React.useState(false);
+  const [provider, setProvider] = React.useState<string | undefined>();
   const searchInputRef = React.useRef<HTMLInputElement | null>(null);
 
   const { searchTorrent, searchLoading, searchedTorrents } = useTorrents();
@@ -92,6 +111,10 @@ const TorrentSearch = ({ onClose, open }: Props) => {
     }
   };
 
+  const handleProviderChange = (event: SelectChangeEvent) => {
+    setProvider(event.target.value);
+  };
+
   const handleTypeChange = (_event: React.ChangeEvent<HTMLInputElement>, value: string) => {
     const type = stringToTorrentTypeEnum(value);
     setTorrentType(type);
@@ -99,9 +122,8 @@ const TorrentSearch = ({ onClose, open }: Props) => {
 
   const doSearch = React.useCallback(() => {
     if (searchLoading || !searchInputRef?.current?.value || !torrentType) return;
-    searchTorrent(searchInputRef.current.value, 100, torrentType);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchTorrent]);
+    searchTorrent(searchInputRef.current.value, 100, torrentType, provider);
+  }, [searchTorrent, torrentType, provider, searchLoading]);
 
   const handleSave = async () => {
     if (selected?.title) {
@@ -113,7 +135,8 @@ const TorrentSearch = ({ onClose, open }: Props) => {
 
   React.useEffect(() => {
     doSearch();
-  }, [torrentType, doSearch]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [torrentType, provider]);
 
   return (
     <>
@@ -156,6 +179,21 @@ const TorrentSearch = ({ onClose, open }: Props) => {
                   label="Shows"
                 />
               </RadioGroup>
+            </FormControl>
+            <FormControl style={{ minWidth: '200px' }}>
+              <InputLabel id="provider-select-label">Provider</InputLabel>
+              <Select
+                labelId="provider-select-label"
+                id="provider-select"
+                label="Provider"
+                onChange={handleProviderChange}
+                style={{ width: '100px;' }}
+              >
+                <MenuItem value="">All</MenuItem>
+                {PROVIDERS.map((provider) => (
+                  <MenuItem value={provider}>{provider}</MenuItem>
+                ))}
+              </Select>
             </FormControl>
           </div>
           <FormControl fullWidth>

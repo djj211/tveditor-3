@@ -55,7 +55,6 @@ const AuthContextProvider = ({ children }: { children?: React.ReactNode }) => {
         return token;
       }
     }
-
     const refreshToken = localStorage.getItem('refreshToken');
 
     if (refreshToken) {
