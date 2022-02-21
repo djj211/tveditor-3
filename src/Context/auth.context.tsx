@@ -4,6 +4,8 @@ import jwt_decode from 'jwt-decode';
 import { useApi } from '../hooks/useApi';
 import { DecodedToken } from '../interfaces';
 
+// Refresh Token is expiring and you are not redirecting to home!
+
 interface AuthContextType {
   isAuthenticated: boolean;
   usingProxy: boolean;
@@ -57,17 +59,21 @@ const AuthContextProvider = ({ children }: { children?: React.ReactNode }) => {
     }
     const refreshToken = localStorage.getItem('refreshToken');
 
-    if (refreshToken) {
-      // Token has expired get new token and update local storage.
-      const data = await post<{ token: string }, { refreshToken: string }>('refresh', {
-        refreshToken: refreshToken,
-      });
+    try {
+      if (refreshToken) {
+        // Token has expired get new token and update local storage.
+        const data = await post<{ token: string }, { refreshToken: string }>('refresh', {
+          refreshToken: refreshToken,
+        });
 
-      if (data.token) {
-        localStorage.setItem('authToken', data.token);
-        setIsAuthenticated(true);
-        return data.token;
+        if (data.token) {
+          localStorage.setItem('authToken', data.token);
+          setIsAuthenticated(true);
+          return data.token;
+        }
       }
+    } catch (ex) {
+      console.debug('Error refreshing token.');
     }
 
     setIsAuthenticated(false);
