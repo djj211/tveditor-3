@@ -59,6 +59,12 @@ const ShowSearch = ({ open, handleClose }: Props) => {
     setOverridStart(!overrideStart);
   };
 
+  React.useEffect(() => {
+    if (open) {
+      reset();
+    }
+  }, [open]);
+
   return (
     <>
       <ActionDialog
@@ -67,7 +73,6 @@ const ShowSearch = ({ open, handleClose }: Props) => {
         open={open}
         handleClose={onClose}
         loading={searchLoading}
-        onReset={reset}
         title="Search"
         submitButtonText="Search"
       >

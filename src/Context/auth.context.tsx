@@ -11,7 +11,6 @@ interface AuthContextType {
   usingProxy: boolean;
   getToken: () => Promise<string | undefined>;
   login: (username: string, password: string) => Promise<boolean>;
-  checkAuthenticated: () => boolean;
 }
 
 const initialState: AuthContextType = {
@@ -23,27 +22,21 @@ const initialState: AuthContextType = {
   login: async (_username: string, _password: string) => {
     return false;
   },
-  checkAuthenticated: () => false,
 };
 
 const BASE_URL = `${process.env.REACT_APP_PROXY_API_URL!}/auth`;
 const AuthContext = React.createContext<AuthContextType>(initialState);
 
+const checkAuthenticated = () => {
+  const refreshToken = localStorage.getItem('refreshToken');
+  return !!refreshToken;
+};
+
 const AuthContextProvider = ({ children }: { children?: React.ReactNode }) => {
-  const [isAuthenticated, setIsAuthenticated] = React.useState(false);
+  const [isAuthenticated, setIsAuthenticated] = React.useState(checkAuthenticated());
   const { post } = useApi(BASE_URL);
 
   const usingProxy = !!process.env.REACT_APP_PROXY_API_URL;
-
-  const checkAuthenticated = React.useCallback(() => {
-    const refreshToken = localStorage.getItem('refreshToken');
-    return !!refreshToken;
-  }, []);
-
-  React.useEffect(() => {
-    const authenticated = checkAuthenticated();
-    setIsAuthenticated(authenticated);
-  }, [checkAuthenticated, setIsAuthenticated]);
 
   const getToken = React.useCallback(async () => {
     const token = localStorage.getItem('authToken');
@@ -76,21 +69,30 @@ const AuthContextProvider = ({ children }: { children?: React.ReactNode }) => {
       console.debug('Error refreshing token.');
     }
 
+    console.debug('set auth token to false');
+
     setIsAuthenticated(false);
     return;
   }, [post]);
 
   const login = async (username: string, password: string) => {
-    const data = await post<{ token: string; refreshToken: string }, { username: string; password: string }>('login', {
-      username: username,
-      password: password,
-    });
+    try {
+      const data = await post<{ token: string; refreshToken: string }, { username: string; password: string }>(
+        'login',
+        {
+          username: username,
+          password: password,
+        },
+      );
 
-    if (data.token) {
-      localStorage.setItem('authToken', data.token);
-      localStorage.setItem('refreshToken', data.refreshToken);
-      setIsAuthenticated(true);
-      return true;
+      if (data.token) {
+        localStorage.setItem('authToken', data.token);
+        localStorage.setItem('refreshToken', data.refreshToken);
+        setIsAuthenticated(true);
+        return true;
+      }
+    } catch (ex) {
+      console.debug('Error attempting to login');
     }
 
     setIsAuthenticated(false);
@@ -102,7 +104,6 @@ const AuthContextProvider = ({ children }: { children?: React.ReactNode }) => {
     usingProxy,
     login,
     getToken,
-    checkAuthenticated,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

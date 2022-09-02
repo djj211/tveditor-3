@@ -9,27 +9,21 @@ import Login from './pages/Login';
 const history = createBrowserHistory();
 
 const ProtectedRoute = (props: RouteProps) => {
-  const { checkAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuth();
   const { addToast } = useToasts();
-  const authenticated = checkAuthenticated();
 
-  React.useEffect(() => {
-    if (!authenticated) {
-      addToast('You must login to access that resource!', { appearance: 'error' });
-    }
-  }, [authenticated, addToast]);
-
-  if (authenticated) {
+  if (isAuthenticated) {
     return <Route {...props} />;
   } else {
+    addToast('You must login to access that resource!', { appearance: 'error' });
     return <Redirect to="/login" />;
   }
 };
 
 const LoggedInRedirectRoute = (props: RouteProps) => {
-  const { checkAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuth();
 
-  if (checkAuthenticated()) {
+  if (isAuthenticated) {
     return <Redirect to="/" />;
   } else {
     return <Route {...props} />;

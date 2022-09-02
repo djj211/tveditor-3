@@ -12,7 +12,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const MediaToggle = () => {
-  const { selectedMedia, setSelectedMediaType } = useMedia();
+  const { selectedMedia, setSelectedMediaType, refreshMovies, refreshShows } = useMedia();
 
   const enableMovies =
     process.env.REACT_APP_ENABLE_MOVIES && process.env.REACT_APP_ENABLE_MOVIES.toLowerCase() === 'true';
@@ -21,6 +21,11 @@ const MediaToggle = () => {
 
   const handleChange = (_event: React.MouseEvent<HTMLElement, MouseEvent>, newMedia: SELECTED_MEDIA) => {
     setSelectedMediaType(newMedia);
+    if (newMedia === SELECTED_MEDIA.MOVIE) {
+      refreshMovies();
+    } else if (newMedia === SELECTED_MEDIA.SHOWS) {
+      refreshShows();
+    }
   };
 
   if (!enableMovies) return null;

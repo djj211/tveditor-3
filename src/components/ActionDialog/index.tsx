@@ -17,26 +17,9 @@ interface Props {
   open: boolean;
   submitButtonText: string;
   handleClose: () => void;
-  onReset?: () => void;
 }
 
-const ActionDialog = ({
-  formName,
-  open,
-  handleClose,
-  children,
-  onReset,
-  loading,
-  subTitle,
-  title,
-  submitButtonText,
-}: Props) => {
-  React.useEffect(() => {
-    if (open && onReset) {
-      onReset();
-    }
-  }, [open, onReset]);
-
+const ActionDialog = ({ formName, open, handleClose, children, loading, subTitle, title, submitButtonText }: Props) => {
   return (
     <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
       <DialogTitle id="form-dialog-title">{title}</DialogTitle>

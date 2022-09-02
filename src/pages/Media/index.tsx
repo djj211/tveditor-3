@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Media = () => {
   const [searchOpen, setSearchOpen] = React.useState(false);
-  const { refreshLoading, refreshShows, selectedMedia, refreshMovies } = useMedia();
+  const { refreshLoading, refreshShows, selectedMedia } = useMedia();
 
   const classes = useStyles();
 
@@ -42,12 +42,8 @@ const Media = () => {
   };
 
   React.useEffect(() => {
-    if (selectedMedia === SELECTED_MEDIA.MOVIE) {
-      refreshMovies();
-    } else if (selectedMedia === SELECTED_MEDIA.SHOWS) {
-      refreshShows();
-    }
-  }, [selectedMedia, refreshMovies, refreshShows]);
+    refreshShows();
+  }, [refreshShows]);
 
   return (
     <>
